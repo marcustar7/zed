@@ -1,0 +1,190 @@
+{
+  "guilds": [
+    {
+      "id": "1327376656482177094",
+      "name": "Hellcat",
+      "track_native_streams": true,
+      "channels": [
+        { "id": "1373197521714679888", "name": "channel-1", "category": "news" }
+      ]
+    },
+    {
+      "id": "1522618570285256794",
+      "name": "The Dynasty",
+      "track_native_streams": true,
+      "channels": [
+        { "id": "1524564787047043082", "name": "channel-1", "category": "news" }
+      ]
+    },
+    {
+      "id": "1531676336756752496",
+      "name": "PreAmp",
+      "track_native_streams": true,
+      "channels": [
+        { "id": "1532757767381844029", "name": "channel-1", "category": "news" }
+      ]
+    },
+    {
+      "id": "1534547743932940458",
+      "name": "YGS",
+      "track_native_streams": true,
+      "channels": [
+        { "id": "1535139629596938310", "name": "channel-1", "category": "news" }
+      ]
+    },
+    {
+      "id": "1394110166911291392",
+      "name": "AIU",
+      "track_native_streams": true,
+      "channels": [
+        { "id": "1394369193431924820", "name": "channel-1", "category": "news" },
+        { "id": "1399818820474114302", "name": "channel-2", "category": "news" },
+        { "id": "1399414668417564732", "name": "release-calendar", "category": "events" }
+      ]
+    },
+    {
+      "id": "1377378857954447542",
+      "name": "Mobvision",
+      "track_native_streams": true,
+      "channels": [
+        { "id": "1377386684341293076", "name": "channel-1", "category": "news" }
+      ]
+    },
+    {
+      "id": "1405132434231660565",
+      "name": "Coletivo SomBR",
+      "track_native_streams": true,
+      "channels": [
+        { "id": "1406238794448900229", "name": "channel-1", "category": "news" },
+        { "id": "1454918046870409468", "name": "channel-2", "category": "news" }
+      ]
+    },
+    {
+      "id": "1314281723046920232",
+      "name": "Suno France Communaute",
+      "track_native_streams": true,
+      "channels": [
+        { "id": "1314497573116968970", "name": "channel-1", "category": "news" },
+        { "id": "1362870907726598174", "name": "channel-2", "category": "news" }
+      ]
+    },
+    {
+      "id": "1409582229364936748",
+      "name": "TRA",
+      "track_native_streams": true,
+      "channels": [
+        { "id": "1409582230682075266", "name": "channel-1", "category": "news" },
+        { "id": "1413923812713697443", "name": "channel-2", "category": "news" }
+      ]
+    },
+    {
+      "id": "1377772563404554370",
+      "name": "Midnight Tee",
+      "track_native_streams": true,
+      "channels": [
+        { "id": "1531661766436716574", "name": "channel-1", "category": "news" }
+      ]
+    },
+    {
+      "id": "1355253297535123677",
+      "name": "Sunovision",
+      "track_native_streams": true,
+      "channels": [
+        { "id": "1447695103689888004", "name": "channel-1", "category": "news" }
+      ]
+    },
+    {
+      "id": "1345637920526041208",
+      "name": "OZBeat AI",
+      "track_native_streams": true,
+      "channels": [
+        { "id": "1354383765715288115", "name": "channel-1", "category": "news" }
+      ]
+    },
+    {
+      "id": "1267565363579846698",
+      "name": "SSC",
+      "track_native_streams": true,
+      "channels": [
+        { "id": "1270307712181469245", "name": "channel-1", "category": "news" },
+        { "id": "1278800559406715022", "name": "channel-2", "category": "news" }
+      ]
+    },
+    {
+      "id": "1486536837169414247",
+      "name": "WAV-R Social",
+      "track_native_streams": true,
+      "channels": [
+        { "id": "1486536837999755476", "name": "channel-1", "category": "news" },
+        { "id": "1501650616454349001", "name": "channel-2", "category": "news" }
+      ]
+    },
+    {
+      "id": "1377163199807492247",
+      "name": "Realest Trillest 1s",
+      "track_native_streams": true,
+      "channels": [
+        { "id": "1377163200562204824", "name": "channel-1", "category": "news" }
+      ]
+    },
+    {
+      "id": "1323355809773649992",
+      "name": "StorytellerZ",
+      "track_native_streams": true,
+      "channels": [
+        { "id": "1324019423836901508", "name": "channel-1", "category": "news" },
+        { "id": "1325241656378785802", "name": "channel-2", "category": "news" },
+        { "id": "1336784162790703124", "name": "channel-3", "category": "news" }
+      ]
+    },
+    {
+      "id": "1302752659262017566",
+      "name": "ViiBR",
+      "track_native_streams": true,
+      "channels": [
+        { "id": "1302752659970719855", "name": "channel-1", "category": "news" },
+        { "id": "1386797023935598642", "name": "channel-2", "category": "news" }
+      ]
+    },
+    {
+      "id": "1432215924286689283",
+      "name": "Souna",
+      "track_native_streams": true,
+      "channels": [
+        { "id": "1432386268662202499", "name": "channel-1", "category": "news" }
+      ]
+    },
+    {
+      "id": "1409164915570245695",
+      "name": "Bancamp",
+      "track_native_streams": true,
+      "channels": [
+        { "id": "1465080248629461164", "name": "channel-1", "category": "news" }
+      ]
+    },
+    {
+      "id": "1404172225124503694",
+      "name": "AIPLAY",
+      "track_native_streams": true,
+      "channels": [
+        { "id": "1404172226139389954", "name": "channel-1", "category": "news" },
+        { "id": "1436076293950017556", "name": "channel-2", "category": "news" },
+        { "id": "1435978991839350885", "name": "channel-3", "category": "news" }
+      ]
+    },
+    {
+      "id": "1416895724158976184",
+      "name": "Distraction Radio",
+      "track_native_streams": true,
+      "channels": [
+        { "id": "1418172847821557800", "name": "channel-1", "category": "news" }
+      ]
+    }
+  ],
+  "recipients": [
+    "652327952314269696",
+    "390626927699951616"
+  ],
+  "report_hour_utc": 13,
+  "report_minute_utc": 0
+}
