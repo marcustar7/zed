@@ -13,37 +13,47 @@ missing API key should never block the daily digest from going out.
 
 import os
 import json
+from datetime import datetime, timezone
 
 from openai import OpenAI
 
 MODEL = os.getenv("OPENAI_MODEL", "gpt-4o-mini")  # cheap and solid for this task
 BATCH_SIZE = 40  # items per API call, keeps each request small and predictable
 
-SYSTEM_PROMPT = (
-    "You clean up raw Discord messages for a daily digest. For each numbered "
-    "item: fix grammar/typos, translate to clear English if it isn't already, "
-    "and tighten wording. Do not add facts, links, or details that aren't in "
-    "the original text. Do not editorialize or add commentary. Keep each "
-    "result close to the original length. "
+SYSTEM_PROMPT_TEMPLATE = (
+    "Today's date is {today}. You prepare raw Discord messages for a scannable "
+    "daily digest. For each numbered item: translate to clear English if it "
+    "isn't already, fix grammar/typos, and condense it into a tight 1-2 "
+    "sentence summary that captures the key point. A short message can just "
+    "be cleaned up as-is without being forced shorter. Do not add facts, "
+    "links, or details that aren't in the original text, and do not "
+    "editorialize or add commentary beyond what's stated.\n\n"
+    "Additionally, if a message references or implies a specific date or "
+    "timeframe (e.g. 'this Friday', 'next week', 'Sept 10th', 'tonight', "
+    "'dropping this weekend'), resolve it to an absolute calendar date in "
+    "YYYY-MM-DD format, using today's date as the reference point. If there's "
+    "no date reference at all, use null for that item's date. For an "
+    "ambiguous multi-day range like 'this weekend', resolve to the first day "
+    "of that range.\n\n"
     'Respond ONLY with JSON in this exact shape: '
-    '{"items": [{"index": 0, "text": "..."}, ...]}, one entry per input item, '
-    "using the same indices you were given."
+    '{{"items": [{{"index": 0, "text": "...", "date": "YYYY-MM-DD or null"}}, ...]}}, '
+    "one entry per input item, using the same indices you were given."
 )
 
 
-def _clean_batch(client, batch):
-    """batch is a list of (index, entry_dict) tuples. Returns {index: cleaned_text}."""
+def _clean_batch(client, batch, today_str):
+    """batch is a list of (index, entry_dict) tuples. Returns {index: {"text":..., "date":...}}."""
     payload = [{"index": i, "text": entry["content"]} for i, entry in batch]
     response = client.chat.completions.create(
         model=MODEL,
         response_format={"type": "json_object"},
         messages=[
-            {"role": "system", "content": SYSTEM_PROMPT},
+            {"role": "system", "content": SYSTEM_PROMPT_TEMPLATE.format(today=today_str)},
             {"role": "user", "content": json.dumps(payload, ensure_ascii=False)},
         ],
     )
     result = json.loads(response.choices[0].message.content)
-    return {item["index"]: item["text"] for item in result.get("items", [])}
+    return {item["index"]: item for item in result.get("items", [])}
 
 
 def clean_and_translate(grouped: dict) -> dict:
@@ -63,17 +73,22 @@ def clean_and_translate(grouped: dict) -> dict:
 
     client = OpenAI(api_key=api_key)
     indexed = list(enumerate(flat))
+    today_str = datetime.now(timezone.utc).date().isoformat()
 
     for start in range(0, len(indexed), BATCH_SIZE):
         batch = indexed[start:start + BATCH_SIZE]
         try:
-            cleaned = _clean_batch(client, batch)
+            cleaned = _clean_batch(client, batch, today_str)
         except Exception as exc:
             print(f"AI cleanup failed for a batch, keeping raw text for it: {exc}")
             continue
         for i, entry in batch:
-            text = cleaned.get(i, "").strip()
+            item = cleaned.get(i)
+            if not item:
+                continue
+            text = (item.get("text") or "").strip()
             if text:
                 entry["content"] = text
+            entry["event_date"] = item.get("date")  # None/null if no date reference
 
     return grouped
