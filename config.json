@@ -188,6 +188,14 @@
         { "id": "1504179193985110016", "name": "channel-1", "category": "news" },
         { "id": "1512540369017897083", "name": "channel-2", "category": "news" }
       ]
+    },
+    {
+      "id": "1417963428189966629",
+      "name": "Zinstrel",
+      "track_native_streams": true,
+      "channels": [
+        { "id": "1428157952849870918", "name": "channel-1", "category": "news" }
+      ]
     }
   ],
   "recipients": [
