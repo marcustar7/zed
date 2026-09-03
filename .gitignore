@@ -1,0 +1,6 @@
+.env
+config.json
+reports.db
+*.pdf
+__pycache__/
+*.pyc
