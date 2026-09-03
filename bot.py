@@ -61,27 +61,26 @@ async def on_message(message: discord.Message):
         return
 
     watch = WATCHED_CHANNELS.get(message.channel.id)
-    if not watch:
-        return
+    if watch and (message.content or message.embeds):
+        category = watch["category"]
+        content_lower = message.content.lower()
 
-    if not message.content and not message.embeds:
-        return
+        # Auto-promote to "livestreams" if a stream link shows up in any watched channel
+        if any(domain in content_lower for domain in LIVESTREAM_DOMAINS):
+            category = "livestreams"
 
-    category = watch["category"]
-    content_lower = message.content.lower()
+        add_item(
+            guild_name=watch["guild_name"],
+            channel_name=watch["channel_name"],
+            category=category,
+            author=str(message.author),
+            content=message.content or "[embed/attachment]",
+            url=message.jump_url,
+        )
 
-    # Auto-promote to "livestreams" if a stream link shows up in any watched channel
-    if any(domain in content_lower for domain in LIVESTREAM_DOMAINS):
-        category = "livestreams"
-
-    add_item(
-        guild_name=watch["guild_name"],
-        channel_name=watch["channel_name"],
-        category=category,
-        author=str(message.author),
-        content=message.content or "[embed/attachment]",
-        url=message.jump_url,
-    )
+    # Required so that commands (like !report) still get dispatched, since we've
+    # overridden the default on_message handler above to also watch channels.
+    await bot.process_commands(message)
 
 
 @bot.event
@@ -102,9 +101,8 @@ async def on_voice_state_update(member: discord.Member, before, after):
         )
 
 
-@tasks.loop(hours=24)
-async def daily_report_task():
-    # Pull each watched guild's upcoming scheduled events before building the report
+async def collect_scheduled_events():
+    """Pulls each watched guild's upcoming scheduled events into the day's collected items."""
     for guild_cfg in CONFIG["guilds"]:
         guild = bot.get_guild(int(guild_cfg["id"]))
         if not guild:
@@ -123,7 +121,17 @@ async def daily_report_task():
                 url=event.url,
             )
 
-    await send_daily_report(bot, RECIPIENTS)
+
+async def run_report_cycle():
+    """The full pipeline: pull scheduled events, then build + send the report.
+    Used by both the daily scheduled task and the on-demand !report command."""
+    await collect_scheduled_events()
+    return await send_daily_report(bot, RECIPIENTS)
+
+
+@tasks.loop(hours=24)
+async def daily_report_task():
+    await run_report_cycle()
 
 
 @daily_report_task.before_loop
@@ -134,6 +142,30 @@ async def before_daily_report():
     if target <= now:
         target += datetime.timedelta(days=1)
     await asyncio.sleep((target - now).total_seconds())
+
+
+def is_recipient(ctx):
+    return str(ctx.author.id) in RECIPIENTS
+
+
+@bot.command(name="report")
+@commands.check(is_recipient)
+async def report_command(ctx):
+    """DM the bot '!report' to pull a digest immediately, instead of waiting for the schedule."""
+    await ctx.send("⏳ Pulling together the latest report now, one moment...")
+    sent = await run_report_cycle()
+    if sent:
+        await ctx.send("✅ Done — check your DMs for the report.")
+    else:
+        await ctx.send("Nothing new has been captured since the last report yet.")
+
+
+@report_command.error
+async def report_command_error(ctx, error):
+    if isinstance(error, commands.CheckFailure):
+        return  # not an authorized recipient — fail silently, no hint given
+    print(f"Error in !report command: {error}")
+    await ctx.send("Something went wrong generating that report — check the deploy logs.")
 
 
 if __name__ == "__main__":

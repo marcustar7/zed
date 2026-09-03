@@ -92,9 +92,10 @@ def build_report():
 
 
 async def send_daily_report(bot, recipient_ids):
+    """Returns True if a report was sent, False if there was nothing new to report."""
     summary_text, filename, ids = build_report()
     if summary_text is None:
-        return  # nothing new since the last report
+        return False  # nothing new since the last report
 
     for user_id in recipient_ids:
         try:
@@ -104,3 +105,4 @@ async def send_daily_report(bot, recipient_ids):
             print(f"Could not DM user {user_id}: {exc}")
 
     mark_all_sent(ids)
+    return True
