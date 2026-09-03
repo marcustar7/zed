@@ -148,10 +148,10 @@ def is_recipient(ctx):
     return str(ctx.author.id) in RECIPIENTS
 
 
-@bot.command(name="report")
+@bot.command(name="zreport")
 @commands.check(is_recipient)
 async def report_command(ctx):
-    """DM the bot '!report' to pull a digest immediately, instead of waiting for the schedule."""
+    """DM the bot '!zreport' to pull a digest immediately, instead of waiting for the schedule."""
     await ctx.send("⏳ Pulling together the latest report now, one moment...")
     sent = await run_report_cycle()
     if sent:
@@ -164,7 +164,7 @@ async def report_command(ctx):
 async def report_command_error(ctx, error):
     if isinstance(error, commands.CheckFailure):
         return  # not an authorized recipient — fail silently, no hint given
-    print(f"Error in !report command: {error}")
+    print(f"Error in !zreport command: {error}")
     await ctx.send("Something went wrong generating that report — check the deploy logs.")
 
 
