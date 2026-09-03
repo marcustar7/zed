@@ -179,6 +179,15 @@
       "channels": [
         { "id": "1418172847821557800", "name": "channel-1", "category": "news" }
       ]
+    },
+    {
+      "id": "1504177752754880522",
+      "name": "Vibya",
+      "track_native_streams": true,
+      "channels": [
+        { "id": "1504179193985110016", "name": "channel-1", "category": "news" },
+        { "id": "1512540369017897083", "name": "channel-2", "category": "news" }
+      ]
     }
   ],
   "recipients": [
